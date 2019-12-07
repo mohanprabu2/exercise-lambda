@@ -1,77 +1,72 @@
-# Author: Mohanprabu Vellingiri
-
-AWSTemplateFormatVersion: '2010-09-09'
-Description: 'Creating resources for excercise-lambda'
-
+AWSTemplateFormatVersion: 2010-09-09
+Description: Creating resources for excercise-lambda
 Parameters:
- LambdaCodeS3Bucket:
-  Type: String
-  Description: S3 bucket where the lambda function code stored
- LambdaCodeS3Key:
-  Type: String
-  Description: S3 key where the lambda function code located 
-
+  LambdaCodeS3Bucket:
+    Type: String
+    Description: S3 bucket where the lambda function code stored
+  LambdaCodeS3Key:
+    Type: String
+    Description: S3 key where the lambda function code located
 Resources:
  LambdaExecutionRole:
-  Type: 'AWS::IAM::Role'
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+        Principal:
+          Service:
+            - lambda.amazonaws.com
+        Action:
+          - 'sts:AssumeRole'
+        Path: /managed/
+      Policies:
+      - PolicyName: excercise-lambda-policy
+        PolicyDocument:
+         Version: 2012-10-17
+         Statement:
+          - Effect: Allow
+            Action:
+             - 's3:PutObject'
+            Resource:
+             - 'arn:aws:s3:::mohan-exercise-lambda/UserName.txt'
+          - Effect: Allow
+            Action:
+             - 'ssm:GetParameter'
+            Resource:
+             - 'arn:aws:ssm:us-east-1:473664416686:parameter/UserName'
+          - Effect: Allow
+            Action:
+             - 'logs:CreateLogGroup'
+             - 'logs:CreateLogStream'
+             - 'logs:PutLogEvents'
+             - 'ec2:CreateNetworkInterface'
+             - 'ec2:DescribeNetworkInterfaces'
+             - 'ec2:DeleteNetworkInterface'
+            Resource: '*'
+ LambdaFunction:
+  Type: 'AWS::Lambda::Function'
   Properties:
-   AssumeRolePolicyDocument:
-    Version: '2012-10-17'
-    Statement:
-     - Effect: Allow
-    Principal:
-     Service:
-      - lambda.amazonaws.com
-    Action:
-     - sts:AssumeRole
-    Path: "/managed/"
-    Policies:
-     -
-      PolicyName: "excercise-lambda-policy"
-      PolicyDocument:
-       Version: "2012-10-17"
-       Statement:
-        - Effect: Allow
-          Action:
-           - 's3:PutObject'
-          Resource: 
-           - 'arn:aws:s3:::mohan-exercise-lambda/UserName.txt'
-        - Effect: Allow
-          Action:
-           - 'ssm:GetParameter'
-          Resource: 
-           - 'arn:aws:ssm:us-east-1:473664416686:parameter/UserName'
-        - Effect: Allow
-          Action:
-           - "logs:CreateLogGroup"
-           - "logs:CreateLogStream"
-           - "logs:PutLogEvents"
-           - "ec2:CreateNetworkInterface"
-           - "ec2:DescribeNetworkInterfaces"
-           - "ec2:DeleteNetworkInterface"
-          Resource: '*'
- LambdaFunction:
-  Type: 'AWS::Lambda::Function'
-  Properties:
-   Handler: main.lambda_handler
-   Runtime: python3.7
-   Code:
-    S3Bucket: !Ref LambdaCodeS3Bucket
-    S3Key: !Ref LambdaCodeS3Key
-   Description: Copy ssm parameter to s3 bucket
-   MemorySize: 128
-   Timeout: 60
-   Role: !GetAtt LambdaExecutionRole.Arn
-   VpcConfig:
-    SecurityGroupIds:
+   Handler: main.lambda_handler
+   Runtime: python3.7
+   Code:
+    S3Bucket: !Ref LambdaCodeS3Bucket
+    S3Key: !Ref LambdaCodeS3Key
+   Description: Copy ssm parameter to s3 bucket
+   MemorySize: 128
+   Timeout: 60
+   Role: !GetAtt LambdaExecutionRole.Arn
+   VpcConfig:
+    SecurityGroupIds:
      - sg-90dac9eb
-    SubnetIds:
+    SubnetIds:
      - subnet-00eb6765
      - subnet-3797243b
-    Environment:
-     Variables:
-      BUCKET_NAME: !Ref LambdaCodeS3Bucket
-    Tags:
-     -
-      Key: Owner
-      Value: Mohan
+   Environment:
+    Variables:
+     BUCKET_NAME: !Ref LambdaCodeS3Bucket
+   Tags:
+    -
+     Key: Owner
+     Value: Mohan
