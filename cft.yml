@@ -24,33 +24,32 @@ Resources:
       - lambda.amazonaws.com
     Action:
      - sts:AssumeRole
-    Path: "/"
+    Path: "/managed/"
     Policies:
      -
       PolicyName: "excercise-lambda-policy"
       PolicyDocument:
        Version: "2012-10-17"
        Statement:
-        - Effect: "Allow"
-          Action:
-           - "s3:PutObject"
-          Resource: 
-           - "arn:aws:s3:::mohan-exercise-lambda/UserName.txt"
-        - Effect: "Allow"
-          Action:
-           - "ssm:GetParameter"
-          Resource: 
-           - "arn:aws:ssm:us-east-1:473664416686:parameter/UserName"
-        - Effect: "Allow"
-          Action:
-           - "logs:CreateLogGroup",
-           - "logs:CreateLogStream",
-           - "logs:PutLogEvents",
-           - "ec2:CreateNetworkInterface",
-           - "ec2:DescribeNetworkInterfaces",
+        - Effect: Allow
+          Action:
+           - 's3:PutObject'
+          Resource: 
+           - 'arn:aws:s3:::mohan-exercise-lambda/UserName.txt'
+        - Effect: Allow
+          Action:
+           - 'ssm:GetParameter'
+          Resource: 
+           - 'arn:aws:ssm:us-east-1:473664416686:parameter/UserName'
+        - Effect: Allow
+          Action:
+           - "logs:CreateLogGroup"
+           - "logs:CreateLogStream"
+           - "logs:PutLogEvents"
+           - "ec2:CreateNetworkInterface"
+           - "ec2:DescribeNetworkInterfaces"
            - "ec2:DeleteNetworkInterface"
-          Resource: 
-           - "*" 
+          Resource: '*'
  LambdaFunction:
   Type: 'AWS::Lambda::Function'
   Properties:
@@ -65,14 +64,14 @@ Resources:
    Role: !GetAtt LambdaExecutionRole.Arn
    VpcConfig:
     SecurityGroupIds:
-     - sg-90dac9eb
+     - sg-90dac9eb
     SubnetIds:
      - subnet-00eb6765
      - subnet-3797243b
     Environment:
      Variables:
       BUCKET_NAME: !Ref LambdaCodeS3Bucket
-    Tags:  
-     -
+    Tags:
+     -
       Key: Owner
       Value: Mohan
