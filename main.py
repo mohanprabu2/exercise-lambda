@@ -4,7 +4,7 @@ import os
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
-logging.basicConfig(filename='main.log')
+#logging.basicConfig(filename='main.log')
 
 #Getting the username parameter from ssm
 def get_username(session):
@@ -26,7 +26,9 @@ def put_username(session, username):
     
     #Getting BUCKET_NAME environment variable 
     try:
-        bucket = os.environ('BUCKET_NAME')
+        bucket = os.environ['BUCKET_NAME']
+        if bucket is None:
+            raise Exception('BUCKET_NAME environment variable not available')
     except Exception as e:
         logger.error('BUCKET_NAME environment variable not available')
         raise e
@@ -58,4 +60,4 @@ def lambda_handler(event, context):
     
     return True
 
-lambda_handler('', '')
+#lambda_handler('', '')
