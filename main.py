@@ -4,7 +4,6 @@ import os
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
-#logging.basicConfig(filename='main.log')
 
 #Getting the username parameter from ssm
 def get_username(session):
@@ -59,5 +58,3 @@ def lambda_handler(event, context):
         return False
     
     return True
-
-#lambda_handler('', '')
