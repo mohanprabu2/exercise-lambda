@@ -1,3 +1,5 @@
+# Owner: Mohanprabu Vellingiri
+
 AWSTemplateFormatVersion: 2010-09-09
 Description: Creating resources for excercise-lambda
 Parameters:
@@ -15,12 +17,12 @@ Resources:
         Version: 2012-10-17
         Statement:
           - Effect: Allow
-        Principal:
-          Service:
-            - lambda.amazonaws.com
-        Action:
-          - 'sts:AssumeRole'
-        Path: /managed/
+            Principal:
+             Service:
+              - lambda.amazonaws.com
+            Action:
+             - 'sts:AssumeRole'
+      Path: '/'
       Policies:
       - PolicyName: excercise-lambda-policy
         PolicyDocument:
@@ -55,14 +57,14 @@ Resources:
     S3Key: !Ref LambdaCodeS3Key
    Description: Copy ssm parameter to s3 bucket
    MemorySize: 128
-   Timeout: 60
+   Timeout: 3
    Role: !GetAtt LambdaExecutionRole.Arn
-   VpcConfig:
-    SecurityGroupIds:
-     - sg-90dac9eb
-    SubnetIds:
-     - subnet-00eb6765
-     - subnet-3797243b
+   #VpcConfig:
+   # SecurityGroupIds:
+   #  - sg-90dac9eb
+   # SubnetIds:
+   #  - subnet-00eb6765
+   #  - subnet-3797243b
    Environment:
     Variables:
      BUCKET_NAME: !Ref LambdaCodeS3Bucket
