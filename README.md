@@ -70,7 +70,6 @@
  $ cat UserName.txt
  JohnDoe
  ```
- #### Done
  
  **Note:**
  - I have used my S3 bucket name (ex: mohan-exercise-lambda), please create your bucket using unique name and replace bucket name.
