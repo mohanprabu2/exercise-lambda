@@ -2,9 +2,9 @@
 
 ## 1. Pre-requisites
 
- - 1.1 Create S3 bucket
+ 1.1 Create S3 bucket
 
- - 1.2 Create SSM parameter
+ 1.2 Create SSM parameter
 
 
 ## 2 . Steps to test this project:
